@@ -16,7 +16,8 @@ const PLACEHOLDER = {
 
 function setModo(novo) {
     // FUNÇÃO: Alterna entre modo "código" (compilação) e "texto" (chat com IA)
-    // Por quê: Mesma interface, mas comportamentos radicalmente diferentes
+    // Por quê: Nova aba "texto" adicionada para permitir conversas diretas com o modelo,
+    // mantendo o modo "código" para compilação e análise estruturada.
     modo = novo;
     document.getElementById('tab-codigo').className = novo === 'codigo' ? 'ativo' : '';
     document.getElementById('tab-texto').className  = novo === 'texto'  ? 'ativo' : '';

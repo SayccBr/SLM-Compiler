@@ -1,0 +1,39 @@
+Usuário (browser)
+      │
+      │  fetch POST /api/...
+      ▼
+   app.py  ←── só roteia, não faz nada
+      │
+      ├── /api/compilar ──► compiler_service.py
+      │                           │
+      │                     MyLexer.tokenize()
+      │                     MyParser.parse()
+      │                     Interpretador.executar()
+      │                           │
+      │                     { status, saida, erros }
+      │                           │
+      │                      browser exibe
+      │
+      ├── /api/analisar ──► slm.py → analisar()
+      │                           │
+      │                     compiler_service.compilar()  ← roda o compiler primeiro
+      │                           │
+      │                    se erro → monta prompt com os erros
+      │                    se ok   → responde sem chamar Ollama
+      │                           │
+      │                     ollama.chat(model='slm-compiler', ...)
+      │                           │
+      │                     extrai bloco ``` da resposta
+      │                           │
+      │                     { resposta, codigo_corrigido }
+      │  
+      └── /api/chat ──────► slm.py → chat_livre()
+                                  │
+                            manda a mensagem direta pro Ollama
+                            SEM passar pelo compiler
+                                  │
+                            ollama.chat(model='slm-compiler', ...)
+                                  │
+                            extrai bloco ``` se tiver
+                                  │
+                            { resposta, codigo_corrigido }
