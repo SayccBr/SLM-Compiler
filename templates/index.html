@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>SLM Compiler</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Syne:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <header>
+        <span class="logo">SLM <em>Compiler</em></span>
+        <span class="badge" id="status-badge"></span>
+    </header>
+
+    <main>
+        <section class="painel" id="painel-codigo">
+            <div class="painel-header">
+                <span>código</span>
+                <div class="acoes">
+                    <button id="btn-compilar" onclick="compilar()">▶ Compilar</button>
+                    <button id="btn-slm" onclick="analisar()">⬡ Analisar SLM</button>
+                </div>
+            </div>
+            <textarea id="editor" spellcheck="false" placeholder="# Escreva seu código aqui...
+inteiro x = 10:
+imprimir x:"></textarea>
+        </section>
+
+        <div class="divisor"></div>
+
+        <section class="painel" id="painel-resposta">
+            <div class="painel-header">
+                <span>resposta</span>
+                <button id="btn-aplicar" onclick="aplicar()" style="display:none">✓ Aplicar correção</button>
+            </div>
+            <pre id="resposta">Pronto para compilar.</pre>
+        </section>
+    </main>
+
+    <script src="/static/app.js"></script>
+</body>
+</html>

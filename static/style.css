@@ -1,0 +1,142 @@
+:root {
+    --bg:        #0d0e14;
+    --surface:   #13141c;
+    --border:    #22253a;
+    --text:      #c8cde8;
+    --muted:     #4a4f72;
+    --accent:    #7eb3ff;
+    --green:     #62d196;
+    --red:       #ff6b7a;
+    --yellow:    #f0c060;
+    --radius:    8px;
+    --font-code: 'JetBrains Mono', monospace;
+    --font-ui:   'Syne', sans-serif;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-ui);
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* ── Header ── */
+header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 24px;
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+}
+
+.logo { font-size: 1.1rem; font-weight: 700; letter-spacing: .05em; }
+.logo em { color: var(--accent); font-style: normal; }
+
+.badge {
+    font-family: var(--font-code);
+    font-size: .72rem;
+    padding: 3px 10px;
+    border-radius: 99px;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    transition: all .3s;
+}
+.badge.ok     { color: var(--green); border-color: var(--green); }
+.badge.erro   { color: var(--red);   border-color: var(--red);   }
+.badge.load   { color: var(--yellow);border-color: var(--yellow);}
+
+/* ── Layout ── */
+main {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+    gap: 0;
+}
+
+.divisor {
+    width: 1px;
+    background: var(--border);
+    flex-shrink: 0;
+}
+
+.painel {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.painel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 16px;
+    border-bottom: 1px solid var(--border);
+    font-size: .75rem;
+    color: var(--muted);
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    flex-shrink: 0;
+}
+
+.acoes { display: flex; gap: 8px; }
+
+/* ── Botões ── */
+button {
+    font-family: var(--font-code);
+    font-size: .75rem;
+    padding: 5px 14px;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text);
+    cursor: pointer;
+    transition: all .15s;
+}
+button:hover  { border-color: var(--accent); color: var(--accent); }
+button:active { transform: scale(.97); }
+button:disabled { opacity: .35; cursor: not-allowed; }
+
+#btn-compilar:hover { border-color: var(--green); color: var(--green); }
+#btn-aplicar        { color: var(--green); border-color: var(--green); }
+#btn-aplicar:hover  { background: #62d19618; }
+
+/* ── Editor ── */
+#editor {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    resize: none;
+    padding: 20px;
+    font-family: var(--font-code);
+    font-size: .88rem;
+    line-height: 1.7;
+    color: var(--text);
+    caret-color: var(--accent);
+}
+
+/* ── Resposta ── */
+#resposta {
+    flex: 1;
+    padding: 20px;
+    font-family: var(--font-code);
+    font-size: .85rem;
+    line-height: 1.7;
+    white-space: pre-wrap;
+    overflow-y: auto;
+    color: var(--text);
+}
+
+#resposta.ok   { color: var(--green); }
+#resposta.erro { color: var(--red); }
+
+/* scrollbar discreta */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
