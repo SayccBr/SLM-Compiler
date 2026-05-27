@@ -1,6 +1,6 @@
 from flask import Flask, request, jsonify, render_template
 from compiler_service import compilar
-from slm import analisar, chat_livre
+from slm import analisar, chat_livre, completar
 
 # Servidor web Flask que atua como orquestrador central, roteiando requisições HTTP para os serviços
 # de compilação (executa código SLM) e análise inteligente (sugere correções via IA)
@@ -28,6 +28,11 @@ def api_chat():
     # Endpoint de conversa livre com IA - recebe qualquer pergunta/solicitação
     # e delega direto para o modelo Ollama sem passar pelo compilador
     return jsonify(chat_livre(request.json['mensagem']))
+
+@app.route('/api/completar', methods=['POST'])
+def api_completar():
+    # Endpoint que usa IA (Ollama) para completar código
+    return jsonify(completar(request.json['codigo']))
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)

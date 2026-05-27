@@ -177,3 +177,51 @@ button:disabled { opacity: .35; cursor: not-allowed; }
     font-size: .9rem;
     line-height: 1.8;
 }
+
+/* ── Sugestão Autocomplete ── */
+#painel-codigo {
+    position: relative;
+}
+
+#sugestao-panel {
+    display: none;
+    align-items: flex-start;
+    gap: 20px;
+    padding: 10px 20px 12px;
+    background: #0d0f1a;
+    border-top: 1px solid var(--border);
+    flex-shrink: 0;
+    max-height: 160px;
+    overflow-y: auto;
+}
+
+#sugestao-panel.visivel {
+    display: flex;
+}
+
+#sugestao-texto {
+    flex: 1;
+    font-family: var(--font-code);
+    font-size: .83rem;
+    line-height: 1.7;
+    color: #6a7aaa;
+    white-space: pre-wrap;
+    margin: 0;
+}
+
+.sugestao-hint {
+    font-family: var(--font-code);
+    font-size: .68rem;
+    color: var(--muted);
+    white-space: nowrap;
+    padding-top: 2px;
+    flex-shrink: 0;
+}
+
+kbd {
+    background: var(--border);
+    color: var(--text);
+    border-radius: 3px;
+    padding: 1px 5px;
+    font-size: .68rem;
+}

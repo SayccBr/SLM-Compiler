@@ -36,7 +36,7 @@ function setBadge(estado, texto) {
 }
 
 function resetResposta() {
-    // Limpa o painel de resposta - volta ao estado inicial
+     // Limpa o painel de resposta - volta ao estado inicial
     painelResp.className = '';
     painelResp.textContent = 'Pronto.';
     btnAplicar.style.display = 'none';
@@ -126,4 +126,64 @@ function aplicar() {
     btnAplicar.style.display = 'none';
     codigoCorrigido = null;
     setBadge('ok', 'aplicado');
+}
+
+// ── Autocomplete ──────────────────────────────────────────────────────────────
+const sugestaoPanel = document.getElementById('sugestao-panel');
+const sugestaoTexto = document.getElementById('sugestao-texto');
+let sugestaoAtiva   = null;
+
+function mostrarSugestao(texto) {
+    sugestaoAtiva = texto;
+    sugestaoTexto.textContent = texto;
+    sugestaoPanel.classList.add('visivel');
+}
+
+function descartarSugestao() {
+    sugestaoAtiva = null;
+    sugestaoPanel.classList.remove('visivel');
+    sugestaoTexto.textContent = '';
+}
+
+function aceitarSugestao() {
+    if (!sugestaoAtiva) return;
+    const cursor = editor.selectionStart;
+    const antes  = editor.value.substring(0, cursor);
+    const depois = editor.value.substring(cursor);
+    editor.value = antes + sugestaoAtiva + depois;
+    // move cursor pro fim da sugestão inserida
+    const novoCursor = cursor + sugestaoAtiva.length;
+    editor.selectionStart = editor.selectionEnd = novoCursor;
+    descartarSugestao();
+}
+
+editor.addEventListener('keydown', async (e) => {
+    if (e.key === 'Tab' && sugestaoAtiva) {
+        e.preventDefault();
+        aceitarSugestao();
+        return;
+    }
+    if (e.key === 'Escape') {
+        descartarSugestao();
+        return;
+    }
+    if (e.ctrlKey && e.key === ' ' && modo === 'codigo') {
+        e.preventDefault();
+        await pedirCompletar();
+    }
+});
+
+async function pedirCompletar() {
+    if (!editor.value.trim()) return;
+    descartarSugestao();
+    setBadge('load', 'completando...');
+
+    // Envia só o código até a posição do cursor
+    const codigoAteCursor = editor.value.substring(0, editor.selectionStart);
+    const data = await post('/api/completar', { codigo: codigoAteCursor });
+
+    if (data.sugestao) {
+        mostrarSugestao(data.sugestao);
+        setBadge('', '');
+    }
 }

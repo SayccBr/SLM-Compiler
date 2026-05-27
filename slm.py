@@ -16,13 +16,13 @@ def _extrair_codigo(texto):
 
 
 def analisar(codigo):
-    # FUNÇÃO PRINCIPAL: Analisa código SLM e sugere correções usando IA
-    # Lógica: Se compilação OK → responde "válido"
-    #         Se compilação ERRO → envia erros para IA elaborar sugestões + código corrigido
+     # FUNÇÃO PRINCIPAL: Analisa código SLM e sugere correções usando IA
+     # Lógica: Se compilação OK → responde "válido"
+     #         Se compilação ERRO → envia erros para IA elaborar sugestões + código corrigido
     resultado = compilar(codigo)
 
     if resultado['status'] == 'ok':
-        return {'resposta': 'Código válido! Nenhum erro encontrado.', 'codigo_corrigido': None}
+        return {'resposta': '✅ Código válido! Nenhum erro encontrado.', 'codigo_corrigido': None}
 
     erros_fmt = '\n'.join(f'• {e}' for e in resultado['erros'])
     prompt = (
@@ -54,3 +54,19 @@ def chat_livre(mensagem):
         'resposta': resposta,
         'codigo_corrigido': _extrair_codigo(resposta)
     }
+
+
+def completar(codigo):
+    # FUNÇÃO: Completa código SLM usando IA
+    # Por quê: Permite ao usuário escrever um trecho de código e pedir para a IA
+    prompt = (
+        "Continue o código abaixo respeitando as regras da linguagem.\n"
+        "Retorne APENAS o trecho que vem a seguir, sem repetir o que já existe:\n\n"
+        f"```\n{codigo}\n```"
+    )
+    resposta = chat(
+        model=MODEL,
+        messages=[{'role': 'user', 'content': prompt}]
+    ).message.content
+
+    return {'sugestao': _extrair_codigo(resposta) or resposta.strip()}
