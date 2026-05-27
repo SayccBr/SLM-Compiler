@@ -1,7 +1,11 @@
 import sly
 from sly import Lexer, Parser
 
-# LEXER
+# Módulo que implementa o compilador completo usando a biblioteca SLY (Sly Lex-Yacc)
+# Três componentes: MyLexer (análise léxica), MyParser (análise sintática), Interpretador (execução)
+
+# LEXER - Análise Léxica: Transforma texto em tokens (números, palavras-chave, operadores, etc)
+# Por quê: O parser precisa de tokens estruturados, não de texto bruto
 class MyLexer(Lexer):
     tokens = {
         'IF', 'ELIF', 'ELSE', 'WHILE', 'FOR', 'IN', 'MATCH', 'CASE',
@@ -242,7 +246,8 @@ class MyParser(Parser):
             print("[ERRO PARSER] Fim de arquivo inesperado")
             print("   Dica: Faltam chaves '}' ou parênteses ')' para fechar um bloco aberto")
 
-# INTERPRETADOR
+# INTERPRETADOR - Execução: Navega pela AST e executa os comandos
+# Por quê: Transforma a representação abstrata em ações concretas (calcular, imprimir, atribuir)
 class Valor:
     def __init__(self, valor, tipo): self.valor, self.tipo = valor, tipo
 
@@ -255,12 +260,16 @@ class Interpretador:
         self.funcoes = {}
 
     def executar(self, ast):
+        # MÉTODO PRINCIPAL: Percorre todos os nós da AST (lista de comandos)
+        # Executa cada comando sequencialmente, capturando ReturnException para funções
         if not ast: return
         try:
             for node in ast: self.executar_no(node)
         except ReturnException: pass
 
     def executar_no(self, node):
+        # Executa um nó específico (comando, condicional, loop, etc)
+        # Tipos: print, atrib (atribuição), if, while, for_range, match, func, return, expr
         if not node: return
         tag = node[0]
         if tag == 'print': print(self.avaliar(node[1]).valor)
@@ -301,6 +310,9 @@ class Interpretador:
             self.avaliar(node[1])
 
     def avaliar(self, node):
+        # MÉTODO CRÍTICO: Avalia uma expressão e retorna um Valor (valor + tipo)
+        # Por quê: Separa avaliação de expressões da execução de comandos
+        # Tipos: int, float, string, bool, var (variável), lista, index, operações, etc
         tag = node[0]
         if tag == 'int': return Valor(node[1], 'int')
         if tag == 'float': return Valor(node[1], 'float')
@@ -372,6 +384,9 @@ import sys
 from io import StringIO
 
 def executar_codigo_web(codigo_fonte):
+    # FUNÇÃO AUXILIAR: Executa o compilador completo e captura toda saída (print, erros)
+    # Usada alternativamente quando compiler_service.py não está disponível
+    # Retorna: string com toda a saída + mensagens de erro do interpretador
     """Executa o interpretador e captura tudo o que ele printar"""
     lexer = MyLexer()
     parser = MyParser()

@@ -1,6 +1,10 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
+    <!-- SLM Compiler - Interface Web
+         Estrutura: Header (logo + status badge) + Main (painel de código | painel de resposta)
+         Estilos: CSS customizado (style.css) + Google Fonts (JetBrains Mono, Syne)
+    -->
     <meta charset="UTF-8">
     <title>SLM Compiler</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -16,10 +20,13 @@
     <main>
         <section class="painel" id="painel-codigo">
             <div class="painel-header">
-                <span>código</span>
+                <div class="toggle">
+                    <button id="tab-codigo" class="ativo" onclick="setModo('codigo')">código</button>
+                    <button id="tab-texto"             onclick="setModo('texto')">texto</button>
+                </div>
                 <div class="acoes">
                     <button id="btn-compilar" onclick="compilar()">▶ Compilar</button>
-                    <button id="btn-slm" onclick="analisar()">⬡ Analisar SLM</button>
+                    <button id="btn-slm" onclick="enviar()">⬡ Analisar SLM</button>
                 </div>
             </div>
             <textarea id="editor" spellcheck="false" placeholder="# Escreva seu código aqui...

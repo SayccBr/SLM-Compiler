@@ -1,3 +1,9 @@
+/* Stylesheet do SLM Compiler
+   Design: Dark theme moderno com cores primárias (azul/verde/vermelho)
+   Layout: Flexbox - Header + Main (2 painéis lado-a-lado)
+   Responsividade: Adaptável para mobile (stack vertical)
+*/
+
 :root {
     --bg:        #0d0e14;
     --surface:   #13141c;
@@ -140,3 +146,34 @@ button:disabled { opacity: .35; cursor: not-allowed; }
 ::-webkit-scrollbar { width: 4px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+/* ── Toggle ── */
+.toggle {
+    display: flex;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 2px;
+    gap: 2px;
+}
+.toggle button {
+    border: none;
+    background: transparent;
+    color: var(--muted);
+    padding: 3px 14px;
+    font-size: .72rem;
+    border-radius: 4px;
+    letter-spacing: .06em;
+}
+.toggle button.ativo {
+    background: var(--surface);
+    color: var(--text);
+    border: 1px solid var(--border);
+}
+
+/* Modo texto — fonte normal no editor */
+#editor.texto {
+    font-family: var(--font-ui);
+    font-size: .9rem;
+    line-height: 1.8;
+}

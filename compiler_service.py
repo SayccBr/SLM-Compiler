@@ -2,8 +2,12 @@ import sys
 from io import StringIO
 from Compiler import MyLexer, MyParser, Interpretador
 
+# Módulo que orquestra o pipeline de compilação: tokenização (lexer) → parsing (parser) → execução (interpretador)
+# Captura erros em cada etapa e retorna status + mensagens para o front-end
 
 def _capturar(fn):
+    # Função auxiliar que executa uma função capturando sua saída (stdout/stderr), resultado e exceções
+    # Por quê: permite isolar erros do compilador sem quebrar o servidor
     buf = StringIO()
     old = sys.stdout, sys.stderr
     sys.stdout = sys.stderr = buf
@@ -18,6 +22,11 @@ def _capturar(fn):
 
 
 def compilar(codigo):
+    # FUNÇÃO PRINCIPAL: Executa o pipeline completo do compilador
+    # Etapas: 1) Lexer tokeniza o código em tokens
+    #         2) Parser constrói árvore de sintaxe abstrata (AST)
+    #         3) Interpretador executa a AST
+    # Retorna: { status: 'ok'|'erro', erros: [], saida: string }
     lexer, parser = MyLexer(), MyParser()
 
     tokens, saida, _  = _capturar(lambda: list(lexer.tokenize(codigo)))

@@ -2,19 +2,27 @@ import re
 from ollama import chat
 from compiler_service import compilar
 
+# Módulo que fornece análise inteligente com IA: integra Ollama (modelo SLM)
+# Dois modos: 1) analisar() - detecta erros no compilador e sugere correções
+#            2) chat_livre() - conversa livre sem passar pelo compilador
 MODEL = 'slm-compiler'
 
 
 def _extrair_codigo(texto):
+    # Função auxiliar: busca bloco de código markdown (```...```) na resposta da IA
+    # Por quê: A resposta da IA contém explicação + código, precisamos extrair apenas o código
     match = re.search(r'```(?:\w*)\n(.*?)```', texto, re.DOTALL)
     return match.group(1).strip() if match else None
 
 
 def analisar(codigo):
+    # FUNÇÃO PRINCIPAL: Analisa código SLM e sugere correções usando IA
+    # Lógica: Se compilação OK → responde "válido"
+    #         Se compilação ERRO → envia erros para IA elaborar sugestões + código corrigido
     resultado = compilar(codigo)
 
     if resultado['status'] == 'ok':
-        return {'resposta': '✅ Código válido! Nenhum erro encontrado.', 'codigo_corrigido': None}
+        return {'resposta': 'Código válido! Nenhum erro encontrado.', 'codigo_corrigido': None}
 
     erros_fmt = '\n'.join(f'• {e}' for e in resultado['erros'])
     prompt = (
@@ -26,6 +34,20 @@ def analisar(codigo):
     resposta = chat(
         model=MODEL,
         messages=[{'role': 'user', 'content': prompt}]
+    ).message.content
+
+    return {
+        'resposta': resposta,
+        'codigo_corrigido': _extrair_codigo(resposta)
+    }
+
+
+def chat_livre(mensagem):
+    # FUNÇÃO: Conversa livre com IA - aceita qualquer pergunta/solicitação
+    # Por quê: Modo "chat" sem restrição de compilação - para perguntas gerais sobre a linguagem/compilador
+    resposta = chat(
+        model=MODEL,
+        messages=[{'role': 'user', 'content': mensagem}]
     ).message.content
 
     return {
